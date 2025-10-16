@@ -8,7 +8,7 @@ export const API_BASE_URL = ENV === "LOCAL"
 
 export const VELTECH_BASE_URL = ENV === "LOCAL"
     ? "http://localhost:4003"   // your local Veltech API
-    : "https://veltech-alumni.hiqlynks.com";
+    : "https://teams-global-5d8p.vercel.app";
 
 // export const MEDIA_URL = "https://d1hj3r7039erwq.cloudfront.net"
 export const ApiEndPoints = {
