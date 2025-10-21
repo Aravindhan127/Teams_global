@@ -24,25 +24,21 @@ import { handleURLQueries } from 'src/@core/layouts/utils'
 // ** Styled Components
 const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
   width: '100%',
-  borderRadius: 999,
-  borderTopRightRadius: 999,
-  borderBottomRightRadius: 999,
-  color: theme.palette.text.primary,
+  borderRadius: 8,
+  color: '#4a4a4a', // Dark grey color for inactive items like in reference image
   transition: 'padding-left .25s ease-in-out, background-color .2s ease-in-out, box-shadow .2s ease-in-out',
   '&:hover': {
-    backgroundColor: 'rgba(30, 42, 120, 0.06)',
+    backgroundColor: 'rgba(30, 42, 120, 0.06)'
   },
   '&.active': {
     '&, &:hover': {
-      boxShadow: theme.shadows[1],
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
+      backgroundColor: '#1e2a78', // Dark blue background like in reference image
+      color: theme.palette.common.white
     },
     '& .MuiTypography-root, & .MuiListItemIcon-root': {
-      color: `${theme.palette.common.white} !important`,
+      color: `${theme.palette.common.white} !important`
     }
   }
-
 }))
 
 const MenuItemTextMetaWrapper = styled(Box)({
@@ -134,7 +130,7 @@ const VerticalNavLink = ({
           {isSubToSub ? null : (
             <ListItemIcon
               sx={{
-                color: 'text.secondary',
+                color: '#4a4a4a', // Dark grey color for inactive icons like in reference image
                 transition: 'margin .25s ease-in-out',
                 ...(navCollapsed && !navHover ? { mr: 0 } : { mr: 2.5 }),
                 ...(parent ? { ml: 1.25, mr: 3.75 } : {}) // This line should be after (navCollapsed && !navHover) condition for proper styling
@@ -148,7 +144,7 @@ const VerticalNavLink = ({
                     fontSize: '0.875rem',
                     ...(!parent ? { fontSize: '1.25rem' } : {}),
                     ...(parent && item.icon ? { fontSize: '0.875rem' } : {})
-                  },
+                  }
                 }}
               />
             </ListItemIcon>
@@ -161,6 +157,9 @@ const VerticalNavLink = ({
             }}
           >
             <Typography
+              sx={{
+                color: '#4a4a4a' // Dark grey color for all titles like in reference image
+              }}
               {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {
                 noWrap: true
               })}

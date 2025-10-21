@@ -64,7 +64,7 @@ function TableOrg({
 
                     // Redirect to sub-admin panel
                     window.open(`${devBaseUrl}/auth-redirect?token=${encodedToken}&user=${encodedUser}`, "_blank");
-                    console.log("devBaseUrl", devBaseUrl, "encodedToken", encodedToken, "encodedUser", encodedUser)
+                    console.log(`${devBaseUrl}/auth-redirect?token=${encodedToken}&user=${encodedUser}`, "_blank")
                 })
                 .catch((error) => {
                     toastError(error);
