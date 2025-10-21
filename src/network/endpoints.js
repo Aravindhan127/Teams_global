@@ -1,6 +1,6 @@
 // You can toggle between local and production easily
-const ENV = 'LOCAL' // change to "PROD" for
-// const ENV = "SERVER"; // change to "PROD" for production
+// const ENV = 'LOCAL' // change to "PROD" for
+const ENV = "SERVER"; // change to "PROD" for production
 
 export const API_BASE_URL =
   ENV === 'LOCAL'
