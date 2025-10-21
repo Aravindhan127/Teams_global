@@ -16,7 +16,10 @@ const SwipeableDrawer = styled(MuiSwipeableDrawer)({
     left: 'unset',
     right: 'unset',
     overflowX: 'hidden',
-    transition: 'width .25s ease-in-out, box-shadow .25s ease-in-out'
+    transition: 'width .25s ease-in-out, box-shadow .25s ease-in-out',
+    backgroundColor: '#FFFFFF',
+    border: 'none',
+    boxShadow: '1px 0 4px rgba(0, 0, 0, 0.05)'
   }
 })
 
@@ -41,35 +44,9 @@ const Drawer = props => {
   // ** Vars
   const { skin, navCollapsed } = settings
 
-  const drawerColor = () => {
-    if (skin === 'semi-dark' && theme.palette.mode === 'light') {
-      return {
-        '& .MuiTypography-root, & .MuiSvgIcon-root': {
-          color: `rgba(${theme.palette.customColors.dark}, 0.87)`
-        }
-      }
-    } else if (skin === 'semi-dark' && theme.palette.mode === 'dark') {
-      return {
-        '& .MuiTypography-root, & .MuiSvgIcon-root': {
-          color: `rgba(${theme.palette.customColors.light}, 0.87)`
-        }
-      }
-    } else return {}
-  }
-
   const drawerBgColor = () => {
-    if (skin === 'semi-dark' && theme.palette.mode === 'light') {
-      return {
-        backgroundColor: theme.palette.customColors.darkBg
-      }
-    } else if (skin === 'semi-dark' && theme.palette.mode === 'dark') {
-      return {
-        backgroundColor: theme.palette.customColors.lightBg
-      }
-    } else {
-      return {
-        backgroundColor: theme.palette.background.paper
-      }
+    return {
+      backgroundColor: '#FFFFFF'
     }
   }
 
@@ -79,7 +56,7 @@ const Drawer = props => {
     onOpen: () => setNavVisible(true),
     onClose: () => setNavVisible(false),
     ModalProps: {
-      keepMounted: true // Better open performance on mobile.
+      keepMounted: true
     }
   }
 
@@ -105,12 +82,8 @@ const Drawer = props => {
       sx={{
         width: navCollapsed ? collapsedNavWidth : navWidth,
         '& .MuiDrawer-paper': {
-          ...drawerColor(),
           ...drawerBgColor(),
-          ...(!hidden && navCollapsed && navHover ? { boxShadow: 9 } : {}),
-          borderRight: navigationBorderWidth === 0 ? 0 : `${navigationBorderWidth}px solid ${theme.palette.divider}`,
-          backgroundColor: theme.palette.common.white,
-          p: 1.5
+          borderRight: navigationBorderWidth === 0 ? 0 : `${navigationBorderWidth}px solid #F5F5F5`
         }
       }}
     >

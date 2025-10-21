@@ -102,7 +102,7 @@ const UserPermissionPage = () => {
                 <PageHeader
                     title={
                         <Typography variant='h5'>
-                            <Translations text='Permissions' />
+                            {/* <Translations text='Permissions' /> */}
                         </Typography>
                     }
                 // action={

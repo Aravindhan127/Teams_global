@@ -19,16 +19,15 @@ import HorizontalAppBarContent from './components/horizontal/AppBarContent'
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
 import AfterVerticalNavMenuContent from './components/vertical/AfterVerticalNavMenuContent'
-import { DefaultPaginationSettings } from 'src/constants/general.const'
+import { useEffect, useState } from 'react'
+import { useAuth } from 'src/hooks/useAuth'
 import { ApiEndPoints } from 'src/network/endpoints'
 import { axiosInstance } from 'src/network/adapter'
-import { useEffect, useState } from 'react'
 import { toastError } from 'src/utils/utils'
-import { useAuth } from 'src/hooks/useAuth'
 
 const UserLayout = ({ children }) => {
   // ** Hooks
-  const { rolePremission, isMasterAdmin, user } = useAuth()
+  const { rolePremission, user, isMasterAdmin } = useAuth()
   const { settings, saveSettings } = useSettings()
   const [loading, setLoading] = useState(false)
   const [allPermission, setAllPermission] = useState([])
@@ -41,9 +40,9 @@ const UserLayout = ({ children }) => {
    *  ! Do not change this value unless you know what you are doing. It can break the template.
    */
   const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
-
   const fetchAllPermissionData = () => {
     setLoading(true)
+
     axiosInstance
       .get(ApiEndPoints.PERMISSION.getPermissions + `?type='all'`)
       .then(response => {
@@ -60,87 +59,13 @@ const UserLayout = ({ children }) => {
     fetchAllPermissionData()
   }, [])
 
-  // const getAccessibleNavItems = navItems => {
-  //   if (!rolePremission) return [];
-
-  //   // SuperAdmin has access to all items
-  //   if (rolePremission?.roleName === 'SuperAdmin') {
-  //     return navItems;
-  //   }
-
-  //   const permissions = rolePremission?.permissions || [];
-
-  //   const filterNavItems = items => {
-  //     return items
-  //       ?.map(item => {
-  //         // Find the corresponding permission from allPermission
-  //         const matchedRole = allPermission?.find(role => role?.permissionName?.toLowerCase() === item?.permission?.toLowerCase());
-
-  //         if (!matchedRole) return null;
-
-  //         // Check if the current permission exists in rolePremission.permissions
-  //         const hasAccess = permissions.some(permission => permission.permissionId === matchedRole.permissionId);
-
-  //         if (!hasAccess) return null;
-
-  //         return {
-  //           ...item,
-  //         };
-  //       })
-  //       .filter(Boolean);
-  //   };
-
-  //   return filterNavItems(navItems);
-  // };
-
-  // const getAccessibleNavItems = navItems => {
-  //   if (!rolePremission) return [];
-
-  //   // SuperAdmin has access to all items
-  //   if (rolePremission === 'superAdmin') {
-  //     return navItems;
-  //   }
-
-  //   const permissions = rolePremission?.permissions || [];
-
-  //   const filterNavItems = items => {
-  //     return items
-  //       ?.map(item => {
-  //         // Always include the "Roles & Permission" section and its related items
-  //         // if (item.sectionTitle === "Roles & Permission" || item.path === '/roles' || item.path === '/permission') {
-  //         //   return item;
-  //         // }
-
-  //         // For other items, find the corresponding permission
-  //         const matchedRole = allPermission?.find(
-  //           role => role?.permissionName?.toLowerCase() === item?.permission?.toLowerCase()
-  //         );
-
-  //         if (!matchedRole) return null;
-
-  //         // Check if the current permission exists in rolePremission.permissions
-  //         const hasAccess = permissions?.some(
-  //           permission => permission.permissionId === matchedRole.permissionId
-  //         );
-
-  //         if (!hasAccess) return null;
-
-  //         return {
-  //           ...item,
-  //         };
-  //       })
-  //       .filter(Boolean);
-  //   };
-
-  //   return filterNavItems(navItems);
-  // };
 
   const getAccessibleNavItems = navItems => {
     if (!rolePremission) return [];
     const userType = user?.orgDetails?.orgType;
 
     // SuperAdmin has access to all items
-    if (isMasterAdmin === true) {
+    if (isMasterAdmin === 'true') {
       return navItems;
     }
 
@@ -167,9 +92,11 @@ const UserLayout = ({ children }) => {
 
     return filterNavItems(navItems);
   };
-  console.log("rolePremission", rolePremission);
-  console.log("allPermission", allPermission);
 
+
+  console.log("rolePremission", rolePremission);
+  console.log("aa", user);
+  console.log("allPermission", allPermission);
   return (
     <Layout
       hidden={hidden}

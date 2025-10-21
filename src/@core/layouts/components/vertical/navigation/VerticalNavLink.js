@@ -20,23 +20,29 @@ import CanViewNavLink from 'src/layouts/components/acl/CanViewNavLink'
 
 // ** Utils
 import { handleURLQueries } from 'src/@core/layouts/utils'
+import { useAuth } from 'src/hooks/useAuth'
+import { useEffect } from 'react'
 
-// ** Styled Components
-const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
+// ** Styled Components ->>>  Drawer child tab css
+const MenuNavLink = styled(ListItemButton)(({ theme, item }) => ({
   width: '100%',
-  borderRadius: 8,
-  color: '#4a4a4a', // Dark grey color for inactive items like in reference image
-  transition: 'padding-left .25s ease-in-out, background-color .2s ease-in-out, box-shadow .2s ease-in-out',
-  '&:hover': {
-    backgroundColor: 'rgba(30, 42, 120, 0.06)'
-  },
+  borderRadius: 10, // Reduced border radius
+  borderTopRightRadius: 10, // Reduced border radius
+  borderBottomRightRadius: 10, // Reduced border radius
+  color: theme.palette.text.primary,
+  transition: 'padding-left .25s ease-in-out',
   '&.active': {
     '&, &:hover': {
-      backgroundColor: '#121280', // Dark blue background like in reference image
-      color: theme.palette.common.white
+      boxShadow: theme.shadows[3],
+      // Single color background
+      backgroundColor: item?.hasChild === false ? '#121280' : '#121280',
+      color: theme.palette.primary.contrastText,
+      '&:hover': {
+        backgroundColor: item?.hasChild === false ? '#121280' : '#121280'
+      }
     },
     '& .MuiTypography-root, & .MuiListItemIcon-root': {
-      color: `${theme.palette.common.white} !important`
+      color: item?.hasChild === false ? '#ffffffff' : '#ffffffde'
     }
   }
 }))
@@ -47,6 +53,7 @@ const MenuItemTextMetaWrapper = styled(Box)({
   alignItems: 'center',
   justifyContent: 'space-between',
   transition: 'opacity .25s ease-in-out',
+
   ...(themeConfig.menuTextTruncate && { overflow: 'hidden' })
 })
 
@@ -65,11 +72,12 @@ const VerticalNavLink = ({
   const theme = useTheme()
   const location = useLocation()
   const [searchParams] = useSearchParams()
-
+  const { user, isCompletedProfile } = useAuth()
+  const type = window.localStorage.getItem('loginType')
   // ** Vars
   const { skin, navCollapsed } = settings
   const IconTag = parent && !item.icon ? themeConfig.navSubItemIcon : item.icon
-
+  console.log('item', item?.hasChild)
   const conditionalBgColor = () => {
     if (skin === 'semi-dark' && theme.palette.mode === 'light') {
       return {
@@ -96,17 +104,38 @@ const VerticalNavLink = ({
     }
   }
 
+  // if (
+  //   (item.type === "college" && type !== "college") ||
+  //   (item.type === "organisation" && type !== "organisation")
+  // ) {
+  //   return null; // Don't render the list item if the condition fails
+  // }
+  console.log('isCompletedProfile', isCompletedProfile)
+
   return (
     <CanViewNavLink navLink={item}>
       <ListItem
         disablePadding
         className='nav-link'
-        disabled={item.disabled || false}
-        sx={{ mt: 1.5, px: '0 !important' }}
+        // disabled={isCompletedProfile === false}
+        sx={{
+          mt: 3.5,
+          px: '0 !important',
+          ...(isCompletedProfile === false ? { pointerEvents: 'none', opacity: 0.5 } : {})
+        }}
       >
         {/* <Link to={item.path === undefined ? '/' : `${item.path}`}> */}
         <MenuNavLink
-          to={item.path === undefined ? '/' : `${item.path}`}
+          to={item.path === undefined ? '/' : item.path}
+          item={item}
+          // item.type
+          //   ? (item.type === "college" && type === "college") ||
+          //     (item.type === "organisation" && type === "organisation")
+          //     ? item.type === "college"
+          //       ? "/college-user"
+          //       : "/organization-user"
+          //     : null
+          //   : item.path}
           component={NavLink}
           className={isNavLinkActive() ? 'active' : ''}
           {...(item.openInNewTab ? { target: '_blank' } : null)}
@@ -120,17 +149,17 @@ const VerticalNavLink = ({
             }
           }}
           sx={{
-            py: 1.25,
+            py: 2.25,
             ...conditionalBgColor(),
             ...(item.disabled ? { pointerEvents: 'none' } : { cursor: 'pointer' }),
-            pl: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 24) / 8 : 3.5,
-            pr: navCollapsed && !navHover ? ((collapsedNavWidth - navigationBorderWidth - 24) / 2 - 5) / 4 : 2.5
+            pl: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 24) / 8 : 5.5,
+            pr: navCollapsed && !navHover ? ((collapsedNavWidth - navigationBorderWidth - 24) / 2 - 5) / 4 : 3.5
           }}
         >
           {isSubToSub ? null : (
             <ListItemIcon
               sx={{
-                color: '#4a4a4a', // Dark grey color for inactive icons like in reference image
+                color: 'text.primary',
                 transition: 'margin .25s ease-in-out',
                 ...(navCollapsed && !navHover ? { mr: 0 } : { mr: 2.5 }),
                 ...(parent ? { ml: 1.25, mr: 3.75 } : {}) // This line should be after (navCollapsed && !navHover) condition for proper styling
@@ -142,7 +171,7 @@ const VerticalNavLink = ({
                 iconProps={{
                   sx: {
                     fontSize: '0.875rem',
-                    ...(!parent ? { fontSize: '1.25rem' } : {}),
+                    ...(!parent ? { fontSize: '1.5rem' } : {}),
                     ...(parent && item.icon ? { fontSize: '0.875rem' } : {})
                   }
                 }}
@@ -157,14 +186,23 @@ const VerticalNavLink = ({
             }}
           >
             <Typography
-              sx={{
-                color: '#4a4a4a' // Dark grey color for all titles like in reference image
-              }}
               {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {
                 noWrap: true
               })}
             >
-              <Translations text={item.title} />
+              <Translations
+                text={item.title}
+                // text={
+                //   item.type
+                //     ? (item.type === "college" && type === "college") ||
+                //       (item.type === "organisation" && type === "organisation")
+                //       ? item.type === "college"
+                //         ? "College"
+                //         : "Organization"
+                //       : null
+                //     : item.title
+                // }
+              />
             </Typography>
             {item.badgeContent ? (
               <Chip

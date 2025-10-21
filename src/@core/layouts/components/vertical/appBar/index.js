@@ -12,7 +12,9 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   padding: theme.spacing(0, 6),
-  backgroundColor: 'transparent',
+  // backgroundColor: 'transparent',
+  background: 'linear-gradient(150deg, rgba(30, 58, 138, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%), #fff',
+
   color: theme.palette.text.primary,
   minHeight: theme.mixins.toolbar.minHeight,
   [theme.breakpoints.down('sm')]: {
@@ -59,7 +61,7 @@ const LayoutAppBar = props => {
       <Toolbar
         className='navbar-content-container'
         sx={{
-          ...(appBar === 'fixed' && scrollTrigger && { ...appBarFixedStyles() }),
+          // ...(appBar === 'fixed' && scrollTrigger && { ...appBarFixedStyles() }),
           ...(contentWidth === 'boxed' && {
             '@media (min-width:1440px)': { maxWidth: `calc(1440px - ${theme.spacing(6)} * 2)` }
           })

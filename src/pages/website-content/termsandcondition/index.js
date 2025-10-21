@@ -51,7 +51,7 @@ const TermsandConditionPage = () => {
             <PageHeader
                 title={
                     <Typography variant="h5">
-                        <Translations text="Terms and Condition" />
+                        {/* <Translations text="Terms and Condition" /> */}
                     </Typography>
                 }
 

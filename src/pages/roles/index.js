@@ -79,7 +79,7 @@ function UserRolesPage() {
                 <PageHeader
                     title={
                         <Typography variant='h5'>
-                            <Translations text='Roles' />
+                            {/* <Translations text='Roles' /> */}
                         </Typography>
                     }
 

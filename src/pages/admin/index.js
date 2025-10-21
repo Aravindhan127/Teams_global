@@ -115,7 +115,7 @@ const Admin = () => {
         <PageHeader
           title={
             <Typography variant='h5'>
-              <Translations text='Admin' />
+              {/* <Translations text='Admin' /> */}
             </Typography>
           }
           action={

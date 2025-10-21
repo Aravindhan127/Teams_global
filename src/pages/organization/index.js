@@ -170,7 +170,7 @@ const Organization = () => {
                 <PageHeader
                     title={
                         <Typography variant='h5'>
-                            <Translations text='Organization' />
+                            {/* <Translations text='Organization' /> */}
                         </Typography>
                     }
                     action={

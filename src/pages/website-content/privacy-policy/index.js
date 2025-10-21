@@ -50,7 +50,7 @@ const PrivacyPolicyPage = () => {
             <PageHeader
                 title={
                     <Typography variant="h5">
-                        <Translations text="Privacy Policy" />
+                        {/* <Translations text="Privacy Policy" /> */}
                     </Typography>
                 }
 

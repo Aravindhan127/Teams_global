@@ -30,6 +30,7 @@ import UserIcon from 'src/layouts/components/UserIcon'
 import Translations from 'src/layouts/components/Translations'
 import CanViewNavGroup from 'src/layouts/components/acl/CanViewNavGroup'
 import { useLocation } from 'react-router-dom'
+import { useAuth } from 'src/hooks/useAuth'
 
 const MenuItemTextWrapper = styled(Box)(() => ({
   width: '100%',
@@ -39,13 +40,14 @@ const MenuItemTextWrapper = styled(Box)(() => ({
   ...(themeConfig.menuTextTruncate && { overflow: 'hidden' })
 }))
 
-const MenuGroupToggleRightIcon = styled(ChevronRight)(({ theme }) => ({
-  color: theme.palette.text.primary,
+// Arrow color when expanded
+const MenuGroupToggleRightIcon = styled(ChevronRight)(({ theme, isActive }) => ({
+  color: isActive ? '#fff' : theme.palette.text.primary,
   transition: 'transform .25s ease-in-out'
 }))
 
-const MenuGroupToggleLeftIcon = styled(ChevronLeft)(({ theme }) => ({
-  color: theme.palette.text.primary,
+const MenuGroupToggleLeftIcon = styled(ChevronLeft)(({ theme, isActive }) => ({
+  color: isActive ? '#fff' : theme.palette.text.primary,
   transition: 'transform .25s ease-in-out'
 }))
 
@@ -66,6 +68,7 @@ const VerticalNavGroup = props => {
     navigationBorderWidth
   } = props
 
+  const { user, isCompletedProfile } = useAuth();
   // ** Hooks & Vars
   const theme = useTheme()
   const location = useLocation()
@@ -126,6 +129,7 @@ const VerticalNavGroup = props => {
       toggleActiveGroup(item, parent)
     }
   }
+
   useEffect(() => {
     if (hasActiveChild(item, currentURL)) {
       if (!groupActive.includes(item.title)) groupActive.push(item.title)
@@ -142,6 +146,7 @@ const VerticalNavGroup = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
+
   useEffect(() => {
     if (navCollapsed && !navHover) {
       setGroupActive([])
@@ -151,27 +156,35 @@ const VerticalNavGroup = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navCollapsed, navHover])
+
   useEffect(() => {
     if (groupActive.length === 0 && !navCollapsed) {
       setGroupActive([])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navHover])
+
   const IconTag = parent && !item.icon ? themeConfig.navSubItemIcon : item.icon
   const menuGroupCollapsedStyles = navCollapsed && !navHover ? { opacity: 0 } : { opacity: 1 }
 
-  const conditionalColor = () => {
+  const conditionalColor = (isActive) => {
     if (skin === 'semi-dark' && theme.palette.mode === 'light') {
       return {
-        color: `rgba(${theme.palette.customColors.dark}, 0.68) !important`
+        color: isActive ? '#fff !important' : `rgba(${theme.palette.customColors.dark}, 0.68) !important`
       }
     } else if (skin === 'semi-dark' && theme.palette.mode === 'dark') {
       return {
-        color: `rgba(${theme.palette.customColors.light}, 0.68) !important`
+        color: isActive ? '#fff !important' : `rgba(${theme.palette.customColors.light}, 0.68) !important`
       }
     } else {
       return {
-        color: `${theme.palette.text.secondary} !important`
+        color: isActive ? '#fff !important' : `${theme.palette.text.secondary} !important`,
+        '&.Mui-selected': {
+          color: '#fff !important',
+          '&:hover': {
+            color: '#fff !important',
+          },
+        },
       }
     }
   }
@@ -201,16 +214,22 @@ const VerticalNavGroup = props => {
           '&:hover': {
             backgroundColor: `rgba(${theme.palette.customColors.light}, 0.12)`
           }
-        }
+        },
       }
     } else {
       return {
         '&.Mui-selected': {
-          backgroundColor: theme.palette.action.hover,
+          // Single color instead of gradient
+          backgroundColor: '#121280',
+          color: 'white',
           '&:hover': {
-            backgroundColor: theme.palette.action.hover
+            backgroundColor: '#121280',
+            color: 'white',
+          },
+          '& .MuiTypography-root, & .MuiListItemIcon-root': {
+            color: '#fff',
           }
-        }
+        },
       }
     }
   }
@@ -222,33 +241,31 @@ const VerticalNavGroup = props => {
           disablePadding
           className='nav-group'
           onClick={handleGroupClick}
-          sx={{ mt: 1.5, px: '0 !important', flexDirection: 'column' }}
+          sx={{ 
+            mt: 1.5, 
+            px: '0 !important', 
+            flexDirection: 'column', 
+            ...(isCompletedProfile === false ? { pointerEvents: 'none', opacity: 0.5 } : {}), 
+          }}
         >
           <ListItemButton
             className={clsx({
               'Mui-selected': groupActive.includes(item.title) || currentActiveGroup.includes(item.title)
             })}
             sx={{
-              py: 1.25,
+              py: 2.25,
               width: '100%',
-              ...conditionalBgColor(),
-              borderTopRightRadius: 999,
-              borderBottomRightRadius: 999,
-              transition: 'padding-left .25s ease-in-out, background-color .2s ease-in-out, box-shadow .2s ease-in-out',
-              '&:hover': { backgroundColor: 'rgba(30, 42, 120, 0.06)' },
-              '&.Mui-selected': {
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.primary.contrastText,
-                '& .MuiTypography-root, & .MuiListItemIcon-root': { color: `${theme.palette.common.white} !important` }
-              },
-              pl: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 24) / 8 : 3.5,
-              pr: navCollapsed && !navHover ? ((collapsedNavWidth - navigationBorderWidth - 24) / 2 - 5) / 4 : 2.5
+              ...conditionalBgColor(), // Parent Tab color
+              borderRadius: 1, // Consistent border radius
+              transition: 'padding-left .25s ease-in-out',
+              pl: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 24) / 8 : 5.5,
+              pr: navCollapsed && !navHover ? ((collapsedNavWidth - navigationBorderWidth - 24) / 2 - 5) / 4 : 3.5
             }}
           >
             {isSubToSub ? null : (
               <ListItemIcon
                 sx={{
-                  color: 'text.secondary',
+                  color: 'text.primary',
                   transition: 'margin .25s ease-in-out',
                   ...(parent && navCollapsed && !navHover ? {} : { mr: 2.5 }),
                   ...(navCollapsed && !navHover ? { mr: 0 } : {}),
@@ -262,7 +279,7 @@ const VerticalNavGroup = props => {
                 />
               </ListItemIcon>
             )}
-            <MenuItemTextWrapper sx={{ ...menuGroupCollapsedStyles, ...(isSubToSub ? { ml: 9 } : {}) }}>
+            <MenuItemTextWrapper sx={{ ...menuGroupCollapsedStyles, ...(isSubToSub ? { ml: 9 } : {}), }}>
               <Typography
                 {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {
                   noWrap: true
@@ -270,7 +287,7 @@ const VerticalNavGroup = props => {
               >
                 <Translations text={item.title} />
               </Typography>
-              <Box className='menu-item-meta' sx={{ ml: 0.8, display: 'flex', alignItems: 'center' }}>
+              <Box className='menu-item-meta' sx={{ ml: 0.8, display: 'flex', alignItems: 'center', }}>
                 {item.badgeContent ? (
                   <Chip
                     label={item.badgeContent}
@@ -286,30 +303,33 @@ const VerticalNavGroup = props => {
                 {direction === 'ltr' ? (
                   <MenuGroupToggleRightIcon
                     sx={{
-                      ...conditionalColor(),
-                      ...(groupActive.includes(item.title) ? { transform: 'rotate(90deg)' } : {})
+                      ...conditionalColor(groupActive.includes(item.title) || currentActiveGroup.includes(item.title)), // Arrow color when expanded
+                      ...(groupActive.includes(item.title) ? { transform: 'rotate(90deg)' } : {}),
                     }}
                   />
                 ) : (
                   <MenuGroupToggleLeftIcon
                     sx={{
-                      ...conditionalColor(),
-                      ...(groupActive.includes(item.title) ? { transform: 'rotate(-90deg)' } : {})
+                      ...conditionalColor(groupActive.includes(item.title) || currentActiveGroup.includes(item.title)), // Arrow color when expanded
+                      ...(groupActive.includes(item.title) ? { transform: 'rotate(-90deg)' } : {}),
                     }}
                   />
                 )}
               </Box>
             </MenuItemTextWrapper>
           </ListItemButton>
+
+          {/* Sub menu(children) in drawer */}
           <Collapse
             component='ul'
             onClick={e => e.stopPropagation()}
             in={groupActive.includes(item.title)}
             sx={{
-              pl: 0,
+              pl: 4,
+              ml: 3,
               width: '100%',
               ...menuGroupCollapsedStyles,
-              transition: 'all .25s ease-in-out'
+              transition: 'all .25s ease-in-out',
             }}
           >
             <VerticalNavItems

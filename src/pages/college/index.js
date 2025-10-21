@@ -169,7 +169,7 @@ const College = () => {
         <PageHeader
           title={
             <Typography variant="h5">
-              <Translations text="College" />
+              {/* <Translations text="College" /> */}
             </Typography>
           }
           action={
