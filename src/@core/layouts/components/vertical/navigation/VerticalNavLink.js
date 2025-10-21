@@ -32,7 +32,7 @@ const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
   },
   '&.active': {
     '&, &:hover': {
-      backgroundColor: '#1e2a78', // Dark blue background like in reference image
+      backgroundColor: '#121280', // Dark blue background like in reference image
       color: theme.palette.common.white
     },
     '& .MuiTypography-root, & .MuiListItemIcon-root': {

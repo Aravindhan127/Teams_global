@@ -10,7 +10,7 @@ const DefaultPalette = (mode, skin, themeColor) => {
       return '#312D4B';
     } else if (mode === 'light') {
       return '#F5F4F9';
-    } else return '#28243D';
+    } else return '#121280';
   };
 
   return {
@@ -18,11 +18,11 @@ const DefaultPalette = (mode, skin, themeColor) => {
       dark: darkColor,
       main: mainColor,
       light: lightColor,
-      darkBg: '#28243D',
+      darkBg: '#121280',
       lightBg: '#F4F5FA',
       // primaryGradient kept for components that reference it, but now deep navy
-      primaryGradient: 'linear-gradient(90deg, #1E2A78 0%, #1E2A78 100%)',
-      bodyBg: mode === 'light' ? '#F4F5FA' : '#28243D',
+      primaryGradient: 'linear-gradient(90deg, #121280 0%, #121280 100%)',
+      bodyBg: mode === 'light' ? '#F4F5FA' : '#121280',
       tableHeaderBg: mode === 'light' ? '#F9FAFC' : '#3D3759'
     },
     common: {
@@ -32,8 +32,8 @@ const DefaultPalette = (mode, skin, themeColor) => {
     mode: mode,
     primary: {
       light: '#2E3FA3',
-      main: '#1E2A78',
-      dark: '#16205C',
+      main: '#121280',
+      dark: '#121280',
       contrastText: '#FFF',
     },
     secondary: {
@@ -83,7 +83,7 @@ const DefaultPalette = (mode, skin, themeColor) => {
       A700: '#303030'
     },
     neutral: {
-      90: '#0E163F',
+      90: '#121280',
       80: '#142057',
       70: '#1A2A6F',
       60: '#23368F',

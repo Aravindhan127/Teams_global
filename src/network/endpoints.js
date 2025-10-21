@@ -1,15 +1,15 @@
 // You can toggle between local and production easily
-// const ENV = 'LOCAL' // change to "PROD" for
-const ENV = "SERVER"; // change to "PROD" for production
+const ENV = 'LOCAL' // change to "PROD" for
+// const ENV = "SERVER"; // change to "PROD" for production
 
 export const API_BASE_URL =
   ENV === 'LOCAL'
-    ? 'http://192.168.1.7:4003' // your local API
+    ? 'http://localhost:4003' // your local API
     : 'https://api.hiqlynks.com'
 
 export const VELTECH_BASE_URL =
   ENV === 'LOCAL'
-    ? 'http://localhost:3002' // your local Veltech API
+    ? 'http://localhost:4000' // your local Veltech API
     : 'https://teams-global-sub-admin.vercel.app'
 
 // export const MEDIA_URL = "https://d1hj3r7039erwq.cloudfront.net" ,VELTECH_BASE_URL = 'https://veltech-alumni.hiqlynks.com'
